@@ -13,7 +13,7 @@ type FileLogger struct {
 
 func (log FileLogger) Info(text string) {
 	time.Sleep(2 * time.Second)
-	file, err := os.OpenFile(log.path, os.O_RDWR|os.O_APPEND, 0666)
+	file, err := os.OpenFile(log.path, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
 
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func (log FileLogger) Info(text string) {
 
 func (log FileLogger) Error(text string) {
 	time.Sleep(2 * time.Second)
-	file, err := os.OpenFile(log.path, os.O_RDWR|os.O_APPEND, 0666)
+	file, err := os.OpenFile(log.path, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
 
 	if err != nil {
 		panic(err)

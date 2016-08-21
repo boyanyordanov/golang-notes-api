@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-var fileLog = FileLogger{path: "notes-api-log.txt"}
+var fileLog = FileLogger{path: "logs/notes-api-log.txt"}
 var notes NoteCollection
 var lastNoteId = 1
 
@@ -35,13 +37,15 @@ func NotePostHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		go fileLog.Info("Demo of info log")
 		go fileLog.Error("Demo of error log")
 		w.Write([]byte("Welcome to the notes API"))
 	})
 
-	http.HandleFunc("/notes", func(w http.ResponseWriter, req *http.Request) {
+	router.HandleFunc("/notes", func(w http.ResponseWriter, req *http.Request) {
 		switch req.Method {
 		case "GET":
 			go fileLog.Info("Received request: GET /notes")
