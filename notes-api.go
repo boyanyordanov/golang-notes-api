@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
-var fileLog = FileLogger{path: "logs/notes-api-log.txt"}
+var fileLog = FileLogger{path: "notes-api-log.txt"}
 var notes NoteCollection
 var lastNoteId = 1
 
@@ -55,6 +56,14 @@ func main() {
 		}
 	})
 
+	srv := &http.Server{
+		Handler: router,
+		Addr:    "127.0.0.1:8080",
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
 	log.Println("Listening on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(srv.ListenAndServe())
 }
